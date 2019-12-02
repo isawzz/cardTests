@@ -20,13 +20,23 @@
 
 	<script>
 		var d = document.getElementById('container');
-		d.style.backgroundColor = 'red';
-		d.style.width = '100px';
-		d.style.height = '170px';
+		// d.style.backgroundColor = 'red';
+		//d.style.width = '100px';
+		//d.style.height = '170px';
 
-		let deck = createDeckWithJokers();
-		attachTo(d,deck);
-		turnDeckFaceUp(deck);
+		let deck = createDeck();
+		showDeck(deck,d);
+		deck.shuffle();
+		//deck.poker();
+		// remove n cards from deck and return them
+		// pop(deck,5); //should yield n cards AND remove them from deck
+		// peek(deck,3); //should yield the cards but nor remove them from deck
+		// move(deck,n,dx,dy); //should translate n cards by dx,dy
+
+
+		//add a card to the deck
+
+
 
 		console.log(deck)
 

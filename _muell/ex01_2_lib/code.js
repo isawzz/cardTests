@@ -1,3 +1,4 @@
+//#region lib functions
 function _createDeck({hasJokers=false}={}){
 	let deck=null;
 	if (hasJokers){deck = Deck(true);}
@@ -11,6 +12,10 @@ function createStandardDeck(){return _createDeck();}
 function createDeckWithJokers(){return _createDeck({hasJokers:true});}
 
 function attachTo(div,deck) { deck.mount(div); }
+function showDeck(deck,div){if (!deck.isVisible) {deck.mount(div);deck.isVisible=true;}}
+function hideDeck(div){if (deck.isVisible) {deck.unmount();deck.isVisible=false;}}
+function showTopCard(deck) {	let card = topCard(deck);	card.mount(d);	card.setSide('front');}
+
 
 function explode(deck, w, h) {
 	deck.cards.forEach(function (card, i) {
@@ -52,6 +57,16 @@ function deal1(deck, w, h) {
 			// y: Math.random() * window.innerHeight - window.innerHeight / 2
 		})
 	});
+}
+function deal2(deck,w,h){
+	
+}
+//#region high level functions
+function showOpenDeckInCenter(div){
+	let deck = createDeckWithJokers();
+	attachTo(d,deck);
+	turnDeckFaceUp(deck);
+
 }
 
 
