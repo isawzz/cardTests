@@ -13,6 +13,7 @@ var bBySuit = document.createElement('button')
 var bFan = document.createElement('button')
 var bPoker = document.createElement('button')
 var bFlip = document.createElement('button')
+var bDeal = document.createElement('button')
 
 bShuffle.textContent = 'Shuffle'
 bSort.textContent = 'Sort'
@@ -20,6 +21,7 @@ bBySuit.textContent = 'By suit'
 bFan.textContent = 'Fan'
 bPoker.textContent = 'Poker'
 bFlip.textContent = 'Flip'
+bDeal.textContent = 'Deal'
 
 topbar1.appendChild(bFlip)
 topbar1.appendChild(bShuffle)
@@ -27,6 +29,7 @@ topbar1.appendChild(bBySuit)
 topbar1.appendChild(bFan)
 topbar1.appendChild(bPoker)
 topbar1.appendChild(bSort)
+topbar1.appendChild(bDeal)
 
 var deck = DeckA()
 
@@ -59,6 +62,6 @@ bPoker.addEventListener('click', function () {
 	})
 	deck.shuffle()
 	deck.shuffle()
-	deck.pokerN()
+	deck.pokerN(4)
 })
 

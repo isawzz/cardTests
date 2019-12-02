@@ -20,3 +20,13 @@ function test0() {
 
 
 }
+function testKnight() {
+	let c = makeCard(0, 'hallo');
+	c.mount(d);
+	c.setSide('front');
+	blank(c);
+	setTitle(c, 'Knight')
+	setText(c, 'You can play this card whenever you want to move the robber!')
+	moveTo(c, -100, -100);
+
+}

@@ -7,6 +7,7 @@
 	<title>HTML5 Deck of Cards</title>
 	<link href="../_lib/css/example.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Ubuntu+Condensed" rel="stylesheet" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -21,15 +22,14 @@
 	<script src="cardHelpers.js"></script>
 	<script src="example.js"></script>
 	<script src="tests.js"></script>
-	<script>const d=document.getElementById('container')</script>
+	<script>const d = document.getElementById('container');</script>
 	<!-- #endregion -->
 
 	<script>
 
-		//test0();
-		let c = makeCard(0,'hallo');
-		c.mount(d);
-		c.setSide('front')
+		//test0(); // testKnight | test0 
+		deck.mount(d);
+		bDeal.addEventListener('click', function () {deck.pokerN(1);});
 
 	</script>
 </body>

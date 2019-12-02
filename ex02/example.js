@@ -193,7 +193,7 @@ bPoker.addEventListener('click', function () {
 	})
 	deck.shuffle()
 	deck.shuffle()
-	deck.pokerN()
+	deck.pokerN(4)
 })
 
 deck.mount(container1)

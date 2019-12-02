@@ -239,19 +239,19 @@ var DeckA = (function () {
 	};
 	var pokerN = {
 		deck: function deck(_deck4) {
-			_deck4.pokerN = _deck4.queued(pokerN);
+			_deck4.pokerN = _deck4.queued(pokerN); //_deck4.pokerN is a function
 
-			function pokerN(next) {
+			function pokerN(next,num) { //pass in additional args here!
 				var cards = _deck4.cards;
 				var len = cards.length;
-				var num = _deck4.num;
+				//var num = 3;//_deck4.num;
 
 				__fontSize = fontSize();
 				console.log()
 				cards.slice(-num).reverse().forEach(function (card, i) {
-					card.pokerN(i, len, function (i) {
+					card.pokerN(num,i, len, function (i) {
 						card.setSide('front');
-						if (i === 4) {
+						if (i === num-1) {
 							next();
 						}
 					});
@@ -261,14 +261,14 @@ var DeckA = (function () {
 		card: function card(_card4) {
 			var cardElem = _card4.elem;
 
-			_card4.pokerN = function (i, len, cb) {
+			_card4.pokerN = function (num,i, len, cb) {
 				var delay = i * 250;
 
 				_card4.animateTo({
 					delay: delay,
 					duration: 250,
 
-					x: Math.round((i - 2.05) * 70 * __fontSize / 16),
+					x: Math.round((i - (num-.8)/2) * 70 * __fontSize / 16),
 					y: Math.round(-110 * __fontSize / 16),
 					rot: 0,
 
