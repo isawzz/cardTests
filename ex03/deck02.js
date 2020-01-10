@@ -925,13 +925,13 @@ var DeckA = (function () {
 			// mount card to target (deck)
 			target.appendChild(elem);
 
-			self.$root = target;
+			self.dCard = target;
 		}
 
 		function unmount() {
 			// unmount from root (deck)
-			self.$root && self.$root.removeChild(elem);
-			self.$root = null;
+			self.dCard && self.dCard.removeChild(elem);
+			self.dCard = null;
 		}
 
 		function setSide(newSide) {
@@ -960,7 +960,7 @@ var DeckA = (function () {
 
 		var deckElem = createElement('div');
 		var self = observable({ mount: mount, unmount: unmount, cards: cards, elem: deckElem });
-		var $root;
+		var dDeck;
 
 		var modules = DeckA.modules;
 		var module;
@@ -989,13 +989,13 @@ var DeckA = (function () {
 
 		function mount(root) {
 			// mount deck to root
-			$root = root;
-			$root.appendChild(deckElem);
+			dDeck = root;
+			dDeck.appendChild(deckElem);
 		}
 
 		function unmount() {
 			// unmount deck from root
-			$root.removeChild(deckElem);
+			dDeck.removeChild(deckElem);
 		}
 
 		function addModule(module) {

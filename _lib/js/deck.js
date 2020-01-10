@@ -3,7 +3,7 @@
 var Deck = (function () {
   // 'use strict';
 
-  var ticking;
+  var ticking	;
   var animations = [];
 
   function animationFrames(delay, duration) {

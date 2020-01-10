@@ -27,9 +27,29 @@
 
 	<script>
 
-		//test0(); // testKnight | test0 
+		//test0(); // testDeal2 | testKnight | test0 | test_1
+		//removeTopNCards(deck,45)
 		deck.mount(d);
-		bDeal.addEventListener('click', function () {deck.pokerN(1);});
+
+		//deck.flip();
+
+		function removeFromTop(deck, n, startFrom=0) {
+			let removedCards = deck.cards.splice(startFrom, n);
+			removedCards.forEach(function (removedCard) {
+				removedCard.unmount();
+			});
+			return removedCards;
+		}
+		function init(deck){
+			deck.unmount();
+			deck.mount(d);
+		}
+		//makeTestButton('reset',()=>init(deck),topbar1);
+		//let cards = removeFromTop(deck,51);
+		//console.log(deck)
+		//console.log(cards)
+
+
 
 	</script>
 </body>

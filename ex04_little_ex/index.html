@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>cards ex01</title>
+	<link rel="icon" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/223/christmas-tree_1f384.png">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Ubuntu+Condensed" rel="stylesheet" type="text/css">
+	<link href="../_lib/css/example.css" rel="stylesheet">
+	<link href="../_lib/css/my.css" rel="stylesheet">
+	<script src="../_lib/js/helpers.js"></script>
+	<script src="../_lib/js/deck.js"></script>
+	<script src="code.js"></script>
+
+</head>
+
+<body>
+	<script>
+		function addDivToBody(w, h, unit = 'px') {
+			let d1 = document.createElement('div');
+			document.body.appendChild(d1);
+			if (isdef(w)) {
+				if (isNumber(w)) w = '' + w + unit;
+				d1.style.setProperty('width', w);
+			}
+			if (isdef(h)) {
+				if (isNumber(h)) h = '' + h + unit;
+				d1.style.setProperty('height', h);
+			}
+			return d1;
+		}
+		function addGridToBody(rows, cols) {
+			let d = addDivToBody();
+			d.classList.add('gridContainer'); // see _lib/css/my.css
+			makeRows(d, rows, cols);
+			return d;
+		}
+		function addGridTo(d, rows, cols) {
+			d.classList.add('gridContainer'); // see _lib/css/my.css
+			makeRows(d, rows, cols);
+			return d;
+		}
+		function makeRows(d, rows, cols, gap = '2px') {
+			//need to have defined css vars and grid-item class!!!
+			//see my.css
+			d.style.setProperty('--grid-rows', rows);
+			d.style.setProperty('--grid-cols', cols);
+			d.style.setProperty('--grid-gap', gap);
+			for (c = 0; c < (rows * cols); c++) {
+				let cell = document.createElement("div");
+				cell.innerText = (c + 1);
+				d.appendChild(cell).className = "grid-item";
+			};
+		};
+		function makeCells(d, rows, cols, gap = '2px') {
+			//need to have defined css vars and grid-item class!!!
+			//see my.css
+			d.style.setProperty('--grid-rows', rows);
+			d.style.setProperty('--grid-cols', cols);
+			d.style.setProperty('--grid-gap', gap);
+			let cells = [];
+			for (r = 0; r < rows; r++) {
+				cells[r] = [];
+				for (c = 0; c < cols; c++) {
+					let cell = document.createElement("div");
+					cell.innerText = (r + ',' + c);
+					d.appendChild(cell).className = "grid-item";
+					cells[r].push(cell);
+
+				}
+			}
+			return cells;
+		}
+		function makeGrid9(d, centerW, centerH, gap = '2px') {
+			//need to have defined css vars and grid-item class!!!
+			//see my.css
+			d.style.setProperty('--grid_center_w', centerW);
+			d.style.setProperty('--grid_center_H', centerH);
+			d.style.setProperty('--grid-gap', gap);
+			let cells = [];
+			for (r = 0; r < 3; r++) {
+				cells[r] = [];
+				for (c = 0; c < 3; c++) {
+					let cell = document.createElement("div");
+					cell.innerText = (r + ',' + c);
+					d.appendChild(cell).className = "grid-item";
+					cells[r].push(cell);
+
+				}
+			}
+			return cells;
+		}
+		function addGrid9To(d1, 8, 8){
+			
+		}
+
+	</script>
+
+	<script>
+		function test03_grid_whrc() {
+			let d1 = addDivToBody(100, 50, '%')
+			addGridTo(d1, 8, 8);
+		}
+	</script>
+
+	<script>
+		function test01_one_deck() {
+			let d1 = document.createElement('div');
+			d1.id = 'myContainer';
+			document.body.appendChild(d1);
+			var d = d1; //document.getElementById('myContainer');
+			let deck = createDeckWithJokers();
+			attachTo(d, deck);
+			// turnDeckFaceUp(deck);
+
+			// console.log(deck)
+
+			// explode(deck, 100, 100);
+		}
+		function test02_grid_rxc() {
+			let d = addGridToBody(8, 8);
+			d.style.setProperty('height', '50%')
+		}
+		//test01_one_deck();
+		//test02_grid_rxc();
+		test03_grid_whrc();
+	</script>
+</body>
+
+</html>

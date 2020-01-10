@@ -8,6 +8,7 @@
 	<link rel="icon" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/223/christmas-tree_1f384.png">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600|Ubuntu+Condensed" rel="stylesheet" type="text/css">
 	<link href="../_lib/css/example.css" rel="stylesheet">
+	<link href="../_lib/css/my.css" rel="stylesheet">
 	<script src="../_lib/js/helpers.js"></script>
 	<script src="../_lib/js/deck.js"></script>
 	<script src="code.js"></script>
@@ -16,13 +17,13 @@
 
 <body>
 
-	<div id="container"></div>
+	<div id="myContainer"></div>
 
 	<script>
-		var d = document.getElementById('container');
-		d.style.backgroundColor = 'red';
-		d.style.width = '100px';
-		d.style.height = '170px';
+		var d = document.getElementById('myContainer');
+		// d.style.backgroundColor = 'red';
+		// d.style.width = '1px';
+		// d.style.height = '1px';
 
 		let deck = createDeckWithJokers();
 		attachTo(d,deck);
