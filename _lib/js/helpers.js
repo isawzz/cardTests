@@ -890,8 +890,8 @@ function colorBlend(zero1, c0, c1, log = true) {
 	return pSBC(zero1, c0, c1, log);
 } //ok
 function colorShade(plusMinus1, color, log = true) {
-	c = anyColorToStandardString(color);
-	return pSBC(plusMinus1, c, undefined, !log);
+	cols1 = anyColorToStandardString(color);
+	return pSBC(plusMinus1, cols1, undefined, !log);
 } //ok
 function colorTrans(cAny, alpha = 0.5) {
 	return anyColorToStandardString(cAny, alpha);
@@ -1069,10 +1069,10 @@ function colorIdealText(bg, grayPreferred = false) {
 	let rgb = colorRGB(bg, true);
 	//jetzt ist bg rgb object
 	const nThreshold = 105; //40; //105;
-	r = rgb.r;
+	rows1 = rgb.r;
 	g = rgb.g;
 	b = rgb.b;
-	var bgDelta = r * 0.299 + g * 0.587 + b * 0.114;
+	var bgDelta = rows1 * 0.299 + g * 0.587 + b * 0.114;
 	var foreColor = 255 - bgDelta < nThreshold ? 'black' : 'white';
 	if (grayPreferred) foreColor = 255 - bgDelta < nThreshold ? 'dimgray' : 'snow';
 	return foreColor;
@@ -2554,8 +2554,12 @@ function clearElement(elem) { //, eventHandlerDictByEvent = {}) {
 	//console.log('clearing',elem)
 	if (isString(elem)) elem = document.getElementById(elem);
 	//$(elem).remove();
+	//console.log(window.jQuery)
+	if (window.jQuery == undefined){elem.innerHTML='';return elem;}
+	// if (!isdef(window.jQuery)) {elem.innerHTML='';return elem;}
 	while (elem.firstChild) {
 		$(elem.firstChild).remove();
+
 		// for (key in eventHandlerDictByEvent) {
 		// 	elem.removeEventListener(key, eventHandlerDictByEvent[key]);
 		// }
@@ -2563,6 +2567,7 @@ function clearElement(elem) { //, eventHandlerDictByEvent = {}) {
 		// elem.removeChild(el);
 		// testHelpers('removed', el);
 	}
+	return elem;
 }
 function clearElementFromChildIndex(elem, idx = 0) {
 	let charr = arrChildren(elem).slice(idx);

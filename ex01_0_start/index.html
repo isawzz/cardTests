@@ -19,33 +19,82 @@
 <body>
 
 	<div id="container"></div>
+	<button onclick='startMoveCard()'>MOVE!</button>
+	<button id='bPoker' onclick='resetCardPosition()'>POKER</button>
 
 	<script>
+		function startMoveCard() {
+			for (let i = 0; i < 20; i++) {
+				moveCard(deck.cards[i], 100 + i, i);
+			}
+		}
+		function resetCardPosition() {
+			deck.intro();
+			// deck.cards.forEach(function (card, i) {
+			// 	card.setSide('front')
+
+			// 	card.animateTo({
+			// 		// delay: 1000 + i * 2, // wait 1 second + i * 2 ms
+			// 		// duration: 500,
+			// 		// ease: 'quartOut',
+
+			// 		x: 0,//Math.random() * window.innerWidth - window.innerWidth / 2,
+			// 		//y: 0,//Math.random() * window.innerHeight - window.innerHeight / 2
+			// 	})
+			// });
+		}
+
+		function auseinander() {
+			deck.cards.forEach(function (card, i) {
+				card.setSide('front')
+
+				// explode
+				card.animateTo({
+					delay: 1000 + i * 2, // wait 1 second + i * 2 ms
+					duration: 500,
+					ease: 'quartOut',
+
+					x: Math.random() * window.innerWidth - window.innerWidth / 2,
+					y: Math.random() * window.innerHeight - window.innerHeight / 2
+				})
+			});
+		}
+		function moveCard(card, x, y) {
+			card.animateTo({ x: x, y: y });
+		}
 		var d = document.getElementById('container');
-		d.style.backgroundColor='red';
-		d.style.width='100px';
-		d.style.height='170px';
+		d.style.backgroundColor = 'red';
+		d.style.width = '100px';
+		d.style.height = '170px';
 
 		// create Deck
 		var deck = Deck();
 
 		// add to DOM
 		deck.mount(d);
-		//Deck.translate(300,0)
+		//Deck.translate(deck,300, 0); //geht NICHT!!!!!
+		//deck.cards[0].animateTo({ x: 100 }) //geht!
+		//deck.animateTo({x:200}) //geht NICHT!!!!!
 
-		deck.cards.forEach(function (card, i) {
-			card.setSide('front')
+		//deck.intro();
+		//deck.shuffle();
 
-			// explode
-			card.animateTo({
-				delay: 1000 + i * 2, // wait 1 second + i * 2 ms
-				duration: 500,
-				ease: 'quartOut',
-
-				x: Math.random() * window.innerWidth - window.innerWidth / 2,
-				y: Math.random() * window.innerHeight - window.innerHeight / 2
+		bPoker = document.getElementById('bPoker');
+		bPoker.addEventListener('click', function () {
+			deck.queue(function (next) {
+				deck.cards.forEach(function (card, i) {
+					setTimeout(function () {
+						card.setSide('back')
+					}, i * 7.5)
+				})
+				next()
 			})
-		});
+			deck.shuffle()
+			deck.shuffle()
+			deck.pokerN(4)
+		})
+
+
 	</script>
 </body>
 
