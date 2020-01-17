@@ -2374,6 +2374,39 @@ function gZone(d, gid, vAnchor, hAnchor, wPercent, hPercent, bg, fg) {
 	// svg1.appendChild(g1);
 	// return g1;
 }
+function addDiv(dParent, { html, w = '100%', h = '100%', bg, fg, border, rounding, margin, padding, float, position, x, y, textAlign, fontSize }) {
+	// bg, fg, border, rounding, margin, padding, float, textAlign}) {
+	let d = document.createElement('div');
+	// make big div
+	if (html) d.innerHTML = html;
+	if (bg) d.style.backgroundColor = bg;
+	if (fg) {
+		d.style.color = fg;
+	}
+	if (isNumber(w)) {
+		w = w + 'px';
+	}
+	if (isNumber(h)) {
+		h = h + 'px';
+	}
+
+	d.style.width = w;
+	d.style.height = h;
+	if (border) {
+		d.style.border = border;
+		d.style.borderRadius = rounding;
+	}
+	if (isNumber(margin)) d.style.margin = margin + 'px';
+	if (isNumber(padding)) d.style.padding = padding + 'px';
+	if (float) d.style.float = float;
+	if (position) d.style.position = position;
+	if (isNumber(x)) d.style.left = x + 'px';
+	if (isNumber(y)) d.style.top = y + 'px';
+	if (textAlign) d.style.textAlign = textAlign;
+	if (fontSize) d.style.fontSize = fontSize;
+	dParent.appendChild(d);
+	return d;
+}
 function addGArea(gName, areaName = 'a_d_game', x = 0, y = 0, clearFirst = true) {
 	let d = document.getElementById(areaName);
 	if (clearFirst) {
@@ -2390,12 +2423,37 @@ function addGArea(gName, areaName = 'a_d_game', x = 0, y = 0, clearFirst = true)
 	g.classList.add('gCentered');
 	return dNew;
 }
+function addDivFill(id, dParent) {
+	let d = document.createElement('div');
+	d.id = id;
+	d.style.width = '100%';
+	d.style.height = '100%';
+	dParent.appendChild(d);
+	return d;
+}
 //function addG(id,centered=true){}
 function addGFill(id, dParent) {
 	//console.log(id, dParent);
 	let res = addSvgg(dParent, id, { originInCenter: true });
 	//console.log(res)
 	return res;
+}
+function addDivPos(dParent, x, y, w, h, { gap, bg, fg, border, rounding, textAlign, fontSize } = {}) {
+	//w and h must be numbers!
+	if (gap > 0) {
+		//check if this div touches right border of parent
+		let wCont = dParent.offsetWidth;
+		let isRight = x + w >= wCont;
+		let hCont = dParent.offsetHeight;
+		let isBottom = y + h >= hCont;
+		//console.log(wCont, 'isRight', isRight);
+		//console.log(hCont, 'isBottom', isBottom);
+		x += gap;
+		y += gap;
+		w -= (isRight ? 2 : 1) * gap;
+		h -= (isBottom ? 2 : 1) * gap;
+	}
+	return addDiv(dParent, { position: 'absolute', x: x, y: y, w: w, h: h, bg, fg, border, rounding, textAlign, fontSize });
 }
 
 function addSvgg(dParent, gid, { w = '100%', h = '100%', bg, fg, originInCenter = false } = {}) {
@@ -2441,12 +2499,42 @@ function addPara_tnt(div, s, margin = '0px', fontSize = '10px', color = 'green')
 	//p.style.cssText = `margin:${margin};font-size:${fontSize};color:${color}`;
 	return p;
 }
+function addStyledDiv(dParent, id, html, styleString) {
+	let d = document.createElement('div');
+	dParent.appendChild(d);
+	d.id = id;
+	d.style.cssText = styleString;
+	if (html) d.innerHTML = html;
+	return d;
+}
+function addDivFullClass(dParent, id, className) {
+	let d = document.createElement('div');
+	dParent.appendChild(d);
+	d.id = id;
+	d.style.width = '100%';
+	d.style.height = '100%';
+	d.classList.add(className);
+	return d;
+}
+function addDivClass(dParent, id, className) {
+	let d = document.createElement('div');
+	dParent.appendChild(d);
+	d.id = id;
+	d.classList.add(className);
+	return d;
+}
 function addSpanColor(dParent, id, bg, fg) {
 	let d = document.createElement('span');
 	dParent.appendChild(d);
 	d.id = id;
 	d.style.color = fg;
 	d.style.backgroundColor = bg;
+	return d;
+}
+function addFlexGridDiv(div) {
+	let d = document.createElement('div');
+	d.classList.add('flex-grid');
+	div.appendChild(d);
 	return d;
 }
 function arrChildren(elem) {

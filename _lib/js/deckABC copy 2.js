@@ -1,43 +1,17 @@
-//deck52
 function iToSuit52_G(suit) {
 	// return suit name from suit value
 	return suit === 0 ? 'spades' : suit === 1 ? 'hearts' : suit === 2 ? 'clubs' : suit === 3 ? 'diamonds' : 'joker';
 }
-function deck52Prep(card) {
+//deck52
+function deck52DrawFace(card,deckParams){
 	let elem = card.elem;
 	var suitName = iToSuit52_G(card.suit);
-	if (card.suitName == 'joker' && card.rank > 3)
-		elem.setAttribute('class', 'card joker');
-	else elem.setAttribute('class', 'card ' + suitName + ' rank' + card.rank);
-}
-function deck52Update(card){deck52Prep(card);}
+	elem.setAttribute('class', 'card ' + suitName + ' rank' + card.rank);
 
-function deck52Back(card) {
+}
+function deck52DrawBack(card,deckParams){
 	card.elem.setAttribute('class', 'card');
 }
-//deckEmpty (immer gleicher joker!)
-function deckEmptyPrep(card) {
-	let elem = card.elem;
-	elem.setAttribute('class', 'card joker');
-}
-function deckEmptyUpdate(card){deckEmptyPrep(card);}
-
-function deckEmptyBack(card) {
-	card.elem.setAttribute('class', 'card');
-}
-//deckWise
-
-function deckAPrep(card) {
-	let elem = card.elem;
-	let i=card.i;
-	elem.setAttribute('class', 'card joker');
-}
-function deckWiseUpdate(card){deckEmptyPrep(card);}
-
-function deckWiseBack(card) {
-	card.elem.setAttribute('class', 'card');
-}
-
 
 
 var DeckB = (function () {
@@ -54,7 +28,7 @@ var DeckB = (function () {
 	var has3d;
 	var maxZ = 52;
 	var displacement = 4;
-	var _deckParams = {}; // kind, fContent, size, N, orientation, repeat, numJokers;
+	var params={}; // kind, fContent, size, N, orientation, repeat, numJokers;
 
 	// fallback
 	window.requestAnimationFrame || (window.requestAnimationFrame = function (cb) { setTimeout(cb, 0); });
@@ -694,19 +668,32 @@ var DeckB = (function () {
 
 	//#endregion
 
-	function fCard(i) {
-		//console.log(_deckParams)
+	function fCard(i,_deckParams) {
+		
+		//console.log('fCards!!!!!!!!!!!!!')
+		//in here I have access to params!!!
+		//this is why can call fContent
 		var transform = prefix('transform');
+
+		// calculate rank/suit, etc..
 		var rank = i % 13 + 1;
 		var suit = i / 13 | 0;
-		var z = (_deckParams.N - i) / displacement;
+		var z = (52 - i) / displacement;
+
+		// create elements
 		var elem = createElement('div');
 		var faceElem = createElement('div');
 		var backElem = createElement('div');
+
+		// states
 		var isDraggable = false;
 		var isFlippable = false;
-		let text = 'hallo'; //dummy
-		var self = { params: _deckParams, text: text, i: i, rank: rank, suit: suit, pos: i, elem: elem, mount: mount, unmount: unmount, setSide: setSide };
+
+		// self is the card itself
+		let text='hallo'; //dummy
+		//console.log('deckParams',_deckParams)
+		var self = { params:_deckParams, text: text, i: i, rank: rank, suit: suit, pos: i, elem: elem, mount: mount, unmount: unmount, setSide: setSide };
+
 		var modules = DeckB.modules;
 		var module;
 
@@ -774,21 +761,26 @@ var DeckB = (function () {
 		};
 
 		//HIER WIRD VISUAL CONTENT OF CARD RESET UND SET!!!!
-
-		self.eraseFace = function () {
+		// set rank & suit
+		self.eraseFace=function(){
 			clearElement(faceElem);
 		}
-		self.prepFace = function () {
-			self.params.fPrepFace(self, self.params);
+		self.prepFace=function(){
+			self.params.fPrepFace(self,self.params);
 
 		}
-		self.updateFace = function () {
-			self.params.fUpdateFace(self, self.params);
+		self.updateFace=function(){
+			self.params.fUpdateFace(self,self.params);
 		}
-		self.updateBack = function () {
-			self.params.fUpdateBack(self, self.params);
+		self.updateBack=function(){
+			self.params.fUpdateBack(self,self.params);
 		}
+
+		//console.log('params',self.params)
+
 		self.prepFace(); //this is generalized setRankSuit first time call!!!
+		
+		// set default side to back
 		self.setSide('back');
 
 		//HIER WURDE VISUAL CONTENT OF CARD RESET UND SET!!!!!!!
@@ -917,6 +909,7 @@ var DeckB = (function () {
 		}
 
 		function setSide(newSide) {
+			// flip sides
 			if (newSide === 'front') {
 				if (self.side === 'back') {
 					elem.removeChild(backElem);
@@ -935,38 +928,59 @@ var DeckB = (function () {
 		}
 	}
 
-	function fDeck(deckParams) {
-		_deckParams = deckParams;
-		console.log(deckParams)
-		//card size and orientation
-		//if orientation is landscape, take larger size as w, else h
-		let w = deckParams.size.w;
-		let h = deckParams.size.h;
-		if (deckParams.orientation == 'landscape' && w < h || w > h) {
-			deckParams.size = { w: h, h: w };
-			w = deckParams.size.w;
-			h = deckParams.size.h;
-		}
-		setCSSVariable('--wCard', w + 'px');
-		setCSSVariable('--hCard', h + 'px');
+	function fDeck(deckParams){//deckType, fPrepFace, fUpdateFace, fPrepBack, fUpdateBack, sz = { w: 78, h: 110 }, rep = 1, or = 'portrait', nJokers = 0, nCards) {
+		//fPrepFace and fUpdateFace are functions that take 2 args card,deckParams
+		//console.log('HAAAAAAAAAAAAAAALLLO')
+		//console.log('deckParams',deckParams)
+		// set deck params
+		params = deckParams;
+		//console.log('params',params)
+		// {
+		// 	kind:deckType, 
+		// 	fPrepFace:fPrepFace?fPrepFace:deck52DrawFace, 
+		// 	fUpdateFace:fUpdateFace?fUpdateFace:deck52DrawFace, 
+		// 	fPrepBack:fPrepBack?fPrepBack:deck52DrawBack, 
+		// 	fUpdateBack:fUpdateBack?fUpdateBack:deck52DrawBack, 
+		// 	size:sz, 
+		// 	orientation:or, 
+		// 	repeat:rep, 
+		// 	numCards:nCards, 
+		// 	numJokers:nJokers,
+		// };
+
+		// //calc total number of deck cards if possible or 100
+		// let defStyle={deck52:{n:52},catan:{n:20},free:{},empty:{n:0}};
+		// let N = defStyle[params.kind].n;
+		// if (nundef(N)) N=params.numCards;
+		// console.log(N);
+		// params.N = N;
 
 		// init cards array
-		var cards = new Array(_deckParams.NTotal);
+		var cards = new Array(params.N);
+
 		var deckElem = createElement('div');
 		var self = observable({ mount: mount, unmount: unmount, cards: cards, elem: deckElem });
 		var dParent;
+
 		var modules = DeckB.modules;
 		var module;
 
+		// make queueable
 		queue(self);
+
+		// load modules
 		for (module in modules) {
 			addModule(modules[module]);
 		}
+
+		// add class
 		deckElem.classList.add('deck');
 
 		var card;
+
+		// create cards
 		for (var i = cards.length; i; i--) {
-			card = cards[i - 1] = fCard(i - 1);
+			card = cards[i - 1] = fCard(i - 1,params);
 			card.setSide('back');
 			card.mount(deckElem);
 		}
@@ -989,12 +1003,14 @@ var DeckB = (function () {
 		}
 
 	}
+	//function DeckA(jokers){console.log('called DeckA')}
 	fDeck.animationFrames = animationFrames;
 	fDeck.ease = ease;
 	fDeck.modules = { bysuit: bysuit, fan: fan, intro: intro, poker: poker, shuffle: shuffle, sort: sort, flip: flip };
 	fDeck.Card = fCard;
 	fDeck.prefix = prefix;
 	fDeck.translate = translate;
-	fDeck.params = _deckParams;
-	return { fDeck: fDeck };
+	fDeck.params = params;
+	//console.log('hallo!')
+	return { fDeck: fDeck }; //DeckA: DeckA, 
 })();

@@ -1,9 +1,66 @@
-var elements={}; //global element collection for resize event
+var elements = {}; //global element collection for resize event
+var iconChars;
+var timit = new TimeIt('timer init');
 
-function registerElement(ms){
+function loadIcons(callback) {
+	let faChars, gaChars;
+	loadYML('/_lib/assets/icons/gameIconCodes.yml', dga => {
+		//console.log(dga);
+		gaChars = dga;
+		loadYML('/_lib/assets/icons/faIconCodes.yml', dfa => {
+			//console.log(dfa);
+			faChars = dfa;
+			iconChars = {};
+			for (const k in faChars) {
+				iconChars[k] = faChars[k];
+			}
+			for (const k in gaChars) {
+				iconChars[k] = gaChars[k];
+			}
+			timit.showTime('loaded icons codes');
+			callback();
+		});
+	});
+}
+function registerElement(ms) {
 	//console.log(ms);
 	elements[ms.id] = ms;
 }
+function _addPicto(dParent, key) {
+	let pic = picto(key, 0, 0, 50, 50, 'red', 'black');
+	dParent.appendChild(pic);
+	return pic;
+}
+function picto(key, x, y, w, h, fg, bg) {
+	//key="skiing-nordic";
+	let ch = iconChars[key];
+	let family = (ch[0] == 'f' || ch[0] == 'F') ? 'pictoFa' : 'pictoGame';
+	let text = String.fromCharCode('0x' + ch);
+	let d = document.createElement('div');
+	d.style.textAlign = 'center';
+	d.style.fontFamily = family;
+	d.style.fontWeight = 900;
+	d.style.fontSize = h;
+	d.style.backgroundColor = bg;
+	d.style.color = fg;
+	d.innerHTML = text;
+	return d;
+}
+function __pictoG(key, x, y, w, h, fg, bg) {
+	//zuerst als g
+	//key="skiing-nordic";
+	let ch = iconChars[key];
+	let family = (ch[0] == 'f' || ch[0] == 'F') ? 'pictoFa' : 'pictoGame';
+	let text = String.fromCharCode('0x' + ch);
+	//code for cat=='g':
+	// if (isdef(bg)) this.rect({ w: w, h: h, fill: bg, x: x, y: y });
+	// // this.text({txt:'\uf520',family:'picto',x:x,y:y,fz:h,fill:fg});
+	// this.text({ txt: text, family: family, weight: 900, x: x, y: y, fz: h, fill: fg });
+	// this.orig.fg = fg;
+	// //this.text({ className:'overlay', txt: text, family: family, weight: 900, x: x, y: y, fz: h, fill: fg });
+	// return this;
+}
+
 
 class DeckMS {
 	constructor(oid, o) {
@@ -50,7 +107,7 @@ class DeckMS {
 	}
 }
 
-function addDeckTo(deck,domel,id,flip=false,drag=false){
+function addDeckTo(deck, domel, id, flip = false, drag = false) {
 	if (nundef(id)) id = getUID();
 	clearElement(domel);
 	let ms = new DeckMS(id, deck);
@@ -59,16 +116,8 @@ function addDeckTo(deck,domel,id,flip=false,drag=false){
 	if (drag) enableDragForDeck(ms.o);
 	return ms;
 }
-function addDivToBody(w = 100, h = 100, unit = '%', bg = 'blue') {
-	let d1 = document.createElement('div');
-	document.body.appendChild(d1);
-	d1.style.setProperty('width', makeUnitString(w, unit));
-	d1.style.setProperty('height', makeUnitString(h, unit));
-	d1.style.setProperty('background-color', bg);
-	return d1;
-}
 function addGridTo(d, rows, cols, gap = '2px') {
-	console.log(d,rows,cols,gap);
+	console.log(d, rows, cols, gap);
 	//need to have defined css vars and grid-item class!!!
 	//see my.css
 	d.classList.add('gridContainer'); // see _lib/css/my.css
@@ -89,12 +138,12 @@ function addGridTo(d, rows, cols, gap = '2px') {
 	}
 	return cells;
 }
-function enableFlipForDeck(d){
+function enableFlipForDeck(d) {
 	d.cards.forEach(function (card, i) {
 		card.enableFlipping();
 	});
 }
-function enableDragForDeck(d){
+function enableDragForDeck(d) {
 	d.cards.forEach(function (card, i) {
 		card.enableDragging();
 
@@ -114,7 +163,7 @@ function displayWindowSize() {
 
 	// Display result inside a div element
 	//console.log("Width: " + w + ", " + "Height: " + h);
-	for(const msId in elements){
+	for (const msId in elements) {
 		elements[msId].center();
 	}
 }
@@ -128,23 +177,23 @@ displayWindowSize();
 //#endregion
 
 //#region tests
-function test07(){
-	let div1 = addDivToBody(100,50,'%','blue');
-	let div2 = addDivToBody(100,50,'%','green');
-	
+function test07() {
+	let div1 = addDivToBody(100, 50, '%', 'blue');
+	let div2 = addDivToBody(100, 50, '%', 'green');
+
 	var deck1 = DeckA();
-	let ms1 = new DeckMS('deck1',deck1);
+	let ms1 = new DeckMS('deck1', deck1);
 	ms1.attachTo(div1);
-	
+
 	deck1.cards.forEach(function (card, i) {
 		card.enableDragging();
 		card.enableFlipping();
 	});
-	
+
 	var deck2 = DeckA();
-	let ms2 = new DeckMS('deck2',deck2);
+	let ms2 = new DeckMS('deck2', deck2);
 	ms2.attachTo(div2);
-	
+
 }
 function test08() {
 	let div1 = addDivToBody(100, 50, '%', 'blue');
@@ -206,7 +255,7 @@ function test10() {
 }
 function test11() {
 	//add deck to body!
-	let ms = addDeckTo(Deck.DeckB(),document.body, 'discardPile', true, true);
+	let ms = addDeckTo(Deck.DeckB(), document.body, 'discardPile', true, true);
 	ms.setPos(0, -300);
 }
 
