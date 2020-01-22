@@ -850,18 +850,6 @@ function addSvgg(dParent, gid, { w = '100%', h = '100%', bg, fg, originInCenter 
 //#endregion
 
 //#region DOM: coordinate and bounds helpers
-function myFunction(){
-	console.log('onresize!!!');
-	//for(const id of [])
-}
-function actualWidth(elem){ return Math.round(getBounds(elem).width);}
-function actualHeight(elem){ return Math.round(getBounds(elem).height);}
-function actualLeft(elem,relToParent=false,elRelTo){ return Math.round(getBounds(elem,relToParent,elRelTo).left);}
-function actualTop(elem,relToParent=false,elRelTo){ return Math.round(getBounds(elem,relToParent,elRelTo).top);}
-function actualCenter(elem,relToParent=false,elRelTo){ 
-	let b = getBounds(elem,relToParent,elRelTo);
-	return {x:Math.round(b.left+b.width/2),y:Math.round(b.top+b.height/2)};
-}
 function getRelBounds(elem, elRel) {
 	let b1 = elem.getBoundingClientRect();
 	if (!elRel) return b1;
@@ -969,17 +957,6 @@ function clearElement(elem) {
 		$(elem.firstChild).remove();
 	}
 	return elem;
-}
-function clearInit(elem, startProps = {}) {
-	clearElement(elem);
-	for (const k in startProps) { elem[k] = startProps[k]; }
-}
-
-function clearElementFromChildIndex(elem, idx = 0) {
-	let charr = arrChildren(elem).slice(idx);
-	for (const ch of charr) {
-		elem.removeChild(ch);
-	}
 }
 function getParent(elem) { return elem.parentElement; }
 function getChildren(elem) { return [...elem.children]; }

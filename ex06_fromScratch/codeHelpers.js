@@ -26,40 +26,6 @@ function registerElement(ms) {
 	//console.log(ms);
 	elements[ms.id] = ms;
 }
-function _addPicto(dParent, key) {
-	let pic = picto(key, 0, 0, 50, 50, 'red', 'black');
-	dParent.appendChild(pic);
-	return pic;
-}
-function picto(key, x, y, w, h, fg, bg) {
-	//key="skiing-nordic";
-	let ch = iconChars[key];
-	let family = (ch[0] == 'f' || ch[0] == 'F') ? 'pictoFa' : 'pictoGame';
-	let text = String.fromCharCode('0x' + ch);
-	let d = document.createElement('div');
-	d.style.textAlign = 'center';
-	d.style.fontFamily = family;
-	d.style.fontWeight = 900;
-	d.style.fontSize = h;
-	d.style.backgroundColor = bg;
-	d.style.color = fg;
-	d.innerHTML = text;
-	return d;
-}
-function __pictoG(key, x, y, w, h, fg, bg) {
-	//zuerst als g
-	//key="skiing-nordic";
-	let ch = iconChars[key];
-	let family = (ch[0] == 'f' || ch[0] == 'F') ? 'pictoFa' : 'pictoGame';
-	let text = String.fromCharCode('0x' + ch);
-	//code for cat=='g':
-	// if (isdef(bg)) this.rect({ w: w, h: h, fill: bg, x: x, y: y });
-	// // this.text({txt:'\uf520',family:'picto',x:x,y:y,fz:h,fill:fg});
-	// this.text({ txt: text, family: family, weight: 900, x: x, y: y, fz: h, fill: fg });
-	// this.orig.fg = fg;
-	// //this.text({ className:'overlay', txt: text, family: family, weight: 900, x: x, y: y, fz: h, fill: fg });
-	// return this;
-}
 
 
 class DeckMS {
@@ -257,6 +223,28 @@ function test11() {
 	//add deck to body!
 	let ms = addDeckTo(Deck.DeckB(), document.body, 'discardPile', true, true);
 	ms.setPos(0, -300);
+}
+function test12() {
+	// let deck = Deck.DeckB('deck52');//,deck52DrawFace,deck52DrawFace,deck52DrawBack,deck52DrawBack);
+	let deck = makeDeck({ kind: 'deckEmpty', nJokers: 5 });
+	addDeckTo(deck, document.body, 'deck1', true, true);
+}
+function test13_simpleDD() {
+	let dParent = addDivToBody();
+	dParent.id = 'dParent';
+	let d = addDivPosTo(dParent, 20, 50, 200, 200, unit = 'px', bg = 'red');
+	let purpleTarget = addDivPosTo(dParent, 250, 50, 300, 200, unit = 'px', bg = 'purple');
+	let greenTarget = addDivPosTo(purpleTarget, 50, 50, 200, 120, unit = 'px', bg = 'green');
+
+	let pic = addPicto(d, 'whistle'); //returns div with centered pictogram
+	//pic.id = 'dPic';
+	pic.type = 'pic';
+	//posXY(pic, dParent, 10, 20);
+
+	makeDraggable(pic);
+	makeDroppable(purpleTarget);
+	//dropPosition = 'centerCentered'; 
+	dropPosition = (ev,elem,target)=>{posOverlap(elem,target,10,5,'type');};
 }
 
 //#endregion
